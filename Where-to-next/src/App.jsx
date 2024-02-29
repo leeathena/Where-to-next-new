@@ -6,7 +6,6 @@ function App() {
   return (
     <>
     <h1 className="title"> Where To Next? </h1>
-    <Search />
     </>
   )
 }
