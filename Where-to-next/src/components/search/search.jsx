@@ -34,6 +34,8 @@ const Search = ({ onSearchChange }) => {
             onChange={handleOnChange}
             loadOptions={loadOptions}
         />
+
+        
     );
 }
 
