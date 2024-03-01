@@ -1,3 +1,5 @@
+import Header from './components/header/Header';
+import CitySearchbar from './components/citysearchbar/CitySearchbar';
 import './App.css'
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
