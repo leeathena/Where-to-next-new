@@ -2,7 +2,7 @@ import "./current-weather.css"
 
 
 const CurrentWeather = ({data}) => {
-
+// can add a card and present the required info like the forecast component
     return (
         <div className="current-weather">
                 <div>
