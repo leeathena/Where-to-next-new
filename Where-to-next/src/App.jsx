@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './components/Header/Header';
+import Header from './components/header/Header';
 import Search from './components/search/search';
 import CurrentWeather from './components/current-weather/current-weather';
-import Forecast from './components/Forecast/forecast';
+import Forecast from './components/forecast/forecast';
 import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
         <Header />
         <Search onSearchChange={handleOnSearchChange} />
         {currentWeather && <CurrentWeather data={currentWeather} />}
-        {forecast && <Forecast data={forecast} currencyRate={currencyRate} />}
+        {/* {forecast && <Forecast data={forecast} currencyRate={currencyRate} />} */}
         {currencyRate && <p>Currency Rate to GBP: {currencyRate}</p>}
       </div>
     </>
