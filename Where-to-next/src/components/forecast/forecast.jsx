@@ -14,7 +14,7 @@ const Forecast = ({ data }) => {
             <div class="col p-4 d-flex flex-column position-static">
               <strong class="d-inline-block mb-2 text-primary-emphasis">Weather</strong>
               <h3 class="mb-0">Temperature: {Math.round(item.main.temp)}°C</h3>
-              <div class="mb-1 text-body-secondary">{item.dt_txt}</div>
+              <div class="mb-1 text-body-secondary">{item.dt_txt}</div> 
             </div>
             <div class="col-auto d-none d-lg-block">
             <img alt="weather" className="small-icon" src={`icons/${item.weather[0].icon}.png`} />
