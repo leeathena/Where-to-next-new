@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY, GEOAPIFY_API_KEY } from './API/api';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from './config/constants';
+
 import Header from './components/header/Header';
 import Search from './components/search/search'; // Ensure correct import path
 import CurrentWeather from './components/current-weather/current-weather'; // Ensure correct import path, if used
-import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
 import SearchResultCard from './components/search-result-card/SearchResultCard';
 import SimpleAlert from './components/SimpleAlert/SimpleAlert'; // Ensure correct import path
 import WordHistory from './components/WordHistory/WordHistory'; // Ensure correct import path and the component is created
 
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { getCurrentLocation, DEFAULT_LOCATION } from './utils/geolocation';
+import { calculateDistance } from './utils/distanceCalculator';
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
@@ -16,6 +21,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [distance, setDistance] = useState(null);
 
   // Load search history from local storage
   useEffect(() => {
@@ -71,20 +77,37 @@ function App() {
 
       setCurrentWeather({ city: searchData.label, ...weatherData });
       setCurrencyRate(rate);
-      setSearchResults(currentResults => [...currentResults, {
-        city: searchData.label,
-        lat,
-        lon,
-        weatherData,
-        forecastData,
-        currencyRate: rate
-      }]);
       setShowAlert(true); // Show the alert upon successful data fetch
 
       // Add city to the search history if it's not already included
       if (!searchHistory.includes(searchData.label)) {
         setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
       }
+
+      getCurrentLocation().then((position) => {
+        const userLat = position.coords.latitude;
+        const userLon = position.coords.longitude;
+      
+        calculateDistance(userLat, userLon, lat, lon, GEOAPIFY_API_KEY).then((distanceValue) => {
+        
+          console.log (`distanceValue: ${distanceValue}`);
+         
+          const newResult = {
+            city: searchData.label,
+            lat,
+            lon,
+            weatherData,
+            forecastData,
+            currencyRate: rate,
+            distance: distanceValue,
+          };
+      
+          setSearchResults(currentResults => [...currentResults, newResult]);
+        });
+      }).catch((error) => {
+        console.error("geolocation error: ", error);
+      });
+
     })
     .catch((err) => {
       console.error("Error fetching data:", err);

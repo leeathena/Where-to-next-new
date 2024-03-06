@@ -33,3 +33,8 @@
 body {
   margin-bottom: 60px; /* Adjust this value based on the height of your fixed section */
 }
+
+
+.leaflet-container {
+  z-index: 1;
+}
