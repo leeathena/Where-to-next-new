@@ -14,6 +14,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getCurrentLocation, DEFAULT_LOCATION } from './utils/geolocation';
 import { calculateDistance } from './utils/distanceCalculator';
+import ReactLoading from 'react-loading';
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
@@ -22,6 +23,7 @@ function App() {
   const [showAlert, setShowAlert] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
   const [distance, setDistance] = useState(null);
+  const [loading, setLoading] = useState(false); 
 
   // Load search history from local storage
   useEffect(() => {
@@ -52,6 +54,7 @@ function App() {
   };
 
   const handleOnSearchChange = (searchData) => {
+    setLoading(true);
     const [lat, lon] = searchData.value.split(" ").map(Number);
     const weatherFetchUrl = `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
     const forecastFetchUrl = `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
@@ -78,7 +81,7 @@ function App() {
       setCurrentWeather({ city: searchData.label, ...weatherData });
       setCurrencyRate(rate);
       setShowAlert(true); // Show the alert upon successful data fetch
-
+      setLoading(false);
       // Add city to the search history if it's not already included
       if (!searchHistory.includes(searchData.label)) {
         setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
@@ -106,6 +109,7 @@ function App() {
         });
       }).catch((error) => {
         console.error("geolocation error: ", error);
+        setLoading(false); 
       });
 
     })
@@ -117,22 +121,32 @@ function App() {
   return (
     <>
       <div className="container">
-        <Header />
-        <Search onSearchChange={handleOnSearchChange} />
-        {showAlert && <SimpleAlert />}
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-          {searchResults.map((result, index) => (
-            <SearchResultCard
-              key={index}
-              data={{ ...result, currentWeather, currencyRate }}
-              onClose={() => handleCloseCard(index)}
-            />
-          ))}
-        </div>
-        <WordHistory history={searchHistory} />
+        {loading && (
+          <div className="loading-container">
+            <ReactLoading type={"bars"} color={"#0000FF"} height={'25%'} width={'25%'} />
+          </div>
+        )}
+        {!loading && (
+          <>
+            <Header />
+            <Search onSearchChange={handleOnSearchChange} />
+            {showAlert && <SimpleAlert />}
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+              {searchResults.map((result, index) => (
+                <SearchResultCard
+                  key={index}
+                  data={{ ...result, currentWeather, currencyRate }}
+                  onClose={() => handleCloseCard(index)}
+                />
+              ))}
+            </div>
+            <WordHistory history={searchHistory} />
+          </>
+        )}
       </div>
     </>
   );
 }
+
 
 export default App;
