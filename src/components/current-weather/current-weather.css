@@ -1,0 +1,12 @@
+Define CSS variables for the colors */ 
+:root { --color-primary: #DDBDD5; --color-secondary: #6B9AC4; --color-accent: #FAFF7F; --color-dark: #395756; --color-highlight: #E75A7C; } 
+
+/* Apply styles using the CSS variables */
+
+.current-weather { 
+    /* Add styles for the outer container */ }
+    
+.city-name { color: var(--color-primary); /* Add styles for the city name */ }
+.text-body-emphasis { color: var(--color-secondary); /* Add styles for the text body emphasis */ } 
+.temperature { color: var(--color-dark); /* Add styles for the temperature */ }
+.weather-icon { /* Add styles for the weather icon */ } 
