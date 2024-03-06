@@ -118,6 +118,12 @@ function App() {
     });
   };
 
+  const clearSearchHistory = () => {
+    setSearchHistory([]); // Clears the search history state
+    localStorage.setItem("searchHistory", JSON.stringify([])); // Optionally clear the history in local storage too
+  };
+  
+
   return (
     <>
       <div className="container">
@@ -140,7 +146,7 @@ function App() {
                 />
               ))}
             </div>
-            <WordHistory history={searchHistory} />
+            <WordHistory history={searchHistory} clearHistory={clearSearchHistory} />
           </>
         )}
       </div>

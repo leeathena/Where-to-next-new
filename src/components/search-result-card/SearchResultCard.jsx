@@ -17,7 +17,6 @@ console.log(distance);
       <Card.Body>
         <Card.Title>{city}</Card.Title>
         <p>Temperature: {weatherData?.main?.temp} °C</p>
-        <p>Currency Rate to GBP: {currencyRate}</p>
         <p>Distance: {distanceInKm}</p>
         <div style={{ height: '200px', marginTop: '10px' }}>
           <MapContainer center={[lat, lon]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
