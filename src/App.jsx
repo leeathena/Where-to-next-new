@@ -12,7 +12,7 @@ function App() {
   const [currencyRate, setCurrencyRate] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
 
-  
+
   const handleCloseCard = (index) => {
     setSearchResults(currentResults => {
       const updatedResults = [...currentResults];
@@ -26,7 +26,7 @@ function App() {
 
     const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`);
     const forecastWeatherFetch = fetch(`${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`);
-    
+
     // Placeholder for determining the currency code based on the selected city's country
     // Implement this functionality based on your application's needs
     const currencyCode = "EUR"; // Example placeholder, replace with actual logic to determine currency code
@@ -70,18 +70,20 @@ function App() {
 
   return (
     <>
-    <div className="container">
-      <Header />
-      <Search onSearchChange={handleOnSearchChange} />
-      {searchResults.map((result, index) => (
-        <SearchResultCard 
-          key={index} 
-          data={{ ...result, currentWeather, currencyRate }} 
-          onClose={() => handleCloseCard(index)} 
-        />
-      ))}
-    </div>
-  </>
+      <div className="container">
+        <Header />
+        <Search onSearchChange={handleOnSearchChange} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+          {searchResults.map((result, index) => (
+            <SearchResultCard
+              key={index}
+              data={{ ...result, currentWeather, currencyRate }}
+              onClose={() => handleCloseCard(index)}
+            />
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 
