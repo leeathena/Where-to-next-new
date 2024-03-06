@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+// Constants, API
+import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from './config/constants';
+
+// Components
 import Header from './components/header/Header';
 import Search from './components/search/search'; // Ensure correct import path
 import CurrentWeather from './components/current-weather/current-weather'; // Ensure correct import path, if used
-import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
 import SearchResultCard from './components/search-result-card/SearchResultCard';
 import SimpleAlert from './components/SimpleAlert/SimpleAlert'; // Ensure correct import path
 import WordHistory from './components/WordHistory/WordHistory'; // Ensure correct import path and the component is created
 
+// Styles
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState(null);

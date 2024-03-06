@@ -1,9 +1,12 @@
-import { useState } from "react";
-import { AsyncPaginate } from "react-select-async-paginate";
-import { GEO_API_URL, geoApiOptions } from '../../API/api';
 import React from 'react';
-import citiesByContinent from '../../cities.js';
+import { useState } from "react";
 import Select from 'react-select';
+import { AsyncPaginate } from "react-select-async-paginate";
+
+import { GEO_API_URL, geoApiOptions } from '../../API/api';
+import citiesByContinent from '../../cities.js'; 
+
+import './search.css';
 
 const Search = ({ onSearchChange }) => {
     const [search, setSearch] = useState(null);
@@ -35,6 +38,7 @@ const Search = ({ onSearchChange }) => {
             value={search}
             onChange={handleOnChange}
             loadOptions={loadOptions}
+            className="drop-down_list"
         />
     );
 };
