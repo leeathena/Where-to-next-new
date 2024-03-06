@@ -12,6 +12,15 @@ function App() {
   const [currencyRate, setCurrencyRate] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
 
+  
+  const handleCloseCard = (index) => {
+    setSearchResults(currentResults => {
+      const updatedResults = [...currentResults];
+      updatedResults.splice(index, 1);
+      return updatedResults;
+    });
+  };
+
   const handleOnSearchChange = (searchData) => {
     const [lat, lon] = searchData.value.split(" ").map(Number);
 
