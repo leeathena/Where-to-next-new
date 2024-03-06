@@ -2,7 +2,7 @@
 
 const citiesByContinent = {
         Europe: [
-            "London", "Paris", "Berlin", "Madrid", "Rome",
+            "London", "Paris", "Berlin", "Madrid", "Rome", "Kyiv",
             "Vienna", "Amsterdam", "Prague", "Warsaw", "Dublin",
             "Budapest", "Lisbon", "Oslo", "Stockholm", "Copenhagen",
             "Athens", "Edinburgh", "Moscow", "Istanbul", "Barcelona"
