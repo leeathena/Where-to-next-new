@@ -1,7 +1,7 @@
 // WordHistory.jsx
 import React from 'react';
 
-function WordHistory({ history }) {
+function WordHistory({ history, onCitySelect}) {
   // Adjusted part of WordHistory.jsx to include the class name
 return (
     <div className="word-history-section">
@@ -9,7 +9,7 @@ return (
         <h3 className="section-heading">Previously Searched Cities</h3>
         <section className="text-center">
           {history.map((city, index) => (
-            <button key={index} className="btn hist-btn word-history">
+            <button key={index} className="btn hist-btn word-history" onClick={() => onCitySelect(city)}>
               {city}
             </button>
           ))}

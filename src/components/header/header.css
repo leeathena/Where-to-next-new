@@ -10,3 +10,9 @@
 .navbar {
     background-color: var(--light-gray); /* Use light gray color */
 }
+
+/* header.css */
+.navbar-brand {
+    font-family: 'Roboto', sans-serif; /* Apply Roboto font */
+    font-weight: 700; /* Optional: Makes the title bold */
+}

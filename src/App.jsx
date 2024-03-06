@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/header/Header';
-import Search from './components/search/search'; // Ensure correct import path
-import CurrentWeather from './components/current-weather/current-weather'; // Ensure correct import path, if used
-import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
+import Search from './components/search/search'; // Make sure this path is correct
 import SearchResultCard from './components/search-result-card/SearchResultCard';
-import SimpleAlert from './components/SimpleAlert/SimpleAlert'; // Ensure correct import path
-import WordHistory from './components/WordHistory/WordHistory'; // Ensure correct import path and the component is created
+import SimpleAlert from './components/SimpleAlert/SimpleAlert';
+import WordHistory from './components/WordHistory/WordHistory'; // Make sure this path is correct
+import currencyapi from '@everapi/currencyapi-js';
+import { WEATHER_API_URL, WEATHER_API_KEY } from './API/api';
 
+const client = new currencyapi('cur_live_lUI2h02ur74Xd81IBFTMjfA2SRP6QOqzpVHfyuuv');
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
@@ -16,6 +17,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
 
   // Load search history from local storage
   useEffect(() => {
@@ -27,7 +29,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
   }, [searchHistory]);
-  
+
   useEffect(() => {
     let timer;
     if (showAlert) {
@@ -35,7 +37,6 @@ function App() {
     }
     return () => clearTimeout(timer); // Cleanup the timer
   }, [showAlert]); // Effect runs only when showAlert changes
-
 
   const handleCloseCard = (index) => {
     setSearchResults(currentResults => {
@@ -49,53 +50,58 @@ function App() {
     const [lat, lon] = searchData.value.split(" ").map(Number);
     const weatherFetchUrl = `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
     const forecastFetchUrl = `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
-    const currencyFetchUrl = `${CURRENCY_API_URL}&symbols=EUR`; // Adjust accordingly
 
-    Promise.all([
-      fetch(weatherFetchUrl),
-      fetch(forecastFetchUrl),
-      fetch(currencyFetchUrl, {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': CURRENCY_API_KEY,
-          'X-RapidAPI-Host': 'example-currency-api-host.com'
-        }
-      })
-    ])
-    .then(async ([weatherResp, forecastResp, currencyResp]) => {
-      const weatherData = await weatherResp.json();
-      const forecastData = await forecastResp.json();
-      const currencyData = await currencyResp.json();
+    client.latest({
+      base_currency: 'GBP', // This could be dynamic based on the search
+      currencies: 'USD, KRW, EUR, JPY, AUD, CAD, CHF, CNY, SEK, NZD'
+    }).then(currencyResp => {
+      // Assuming you want to do something with the currency data here
+      console.log(currencyResp);
 
-      const rate = currencyData?.rates?.EUR; // Adjust according to your currency data structure
+      Promise.all([
+        fetch(weatherFetchUrl),
+        fetch(forecastFetchUrl),
+      ])
+        .then(async ([weatherResp, forecastResp]) => {
+          const weatherData = await weatherResp.json();
+          const forecastData = await forecastResp.json();
 
-      setCurrentWeather({ city: searchData.label, ...weatherData });
-      setCurrencyRate(rate);
-      setSearchResults(currentResults => [...currentResults, {
-        city: searchData.label,
-        lat,
-        lon,
-        weatherData,
-        forecastData,
-        currencyRate: rate
-      }]);
-      setShowAlert(true); // Show the alert upon successful data fetch
+          const rate = currencyResp?.rates?.EUR; // Adjust according to your currency data structure
 
-      // Add city to the search history if it's not already included
-      if (!searchHistory.includes(searchData.label)) {
-        setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
-      }
-    })
-    .catch((err) => {
-      console.error("Error fetching data:", err);
-    });
+          setCurrentWeather({ city: searchData.label, ...weatherData });
+          setCurrencyRate(rate);
+          setSearchResults(currentResults => [...currentResults, {
+            city: searchData.label,
+            lat,
+            lon,
+            weatherData,
+            forecastData,
+            currencyRate: rate
+          }]);
+          setShowAlert(true); // Show the alert upon successful data fetch
+
+          // Add city to the search history if it's not already included
+          if (!searchHistory.includes(searchData.label)) {
+            setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching data:", err);
+        });
+    }).catch(err => console.error("Currency API error:", err));
+  };
+  
+  // New function to handle city selection from history
+  const handleCitySelect = (cityLabel) => {
+    setSelectedCity(cityLabel);
+    // Additional logic to trigger search or other actions based on city selection can be added here
   };
 
   return (
     <>
       <div className="container">
         <Header />
-        <Search onSearchChange={handleOnSearchChange} />
+        <Search onSearchChange={handleOnSearchChange} selectedCity={selectedCity} />
         {showAlert && <SimpleAlert />}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
           {searchResults.map((result, index) => (
@@ -106,7 +112,8 @@ function App() {
             />
           ))}
         </div>
-        <WordHistory history={searchHistory} />
+        {/* Render WordHistory with onCitySelect prop */}
+        <WordHistory history={searchHistory} onCitySelect={handleCitySelect} />
       </div>
     </>
   );

@@ -16,6 +16,6 @@ export const WEATHER_API_URL ='https://api.openweathermap.org/data/2.5';
 
 export const WEATHER_API_KEY = '474bb2503c4e1995d2a119127b776565';
 
-export const CURRENCY_API_URL = 'https://api.currencyapi.com/v3/latest?apikey=cur_live_anGzRistT9B8GwFbkQTe6zvN2U4W7ZL6tM6YZCFY&currencies=USD%2CEUR%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD&base_currency=GBP';
+export const CURRENCY_API_URL = 'http://api.exchangeratesapi.io/v1/latest?access_key=823fd9a381aec08ab3e59fa4977e4bfe';
 
-export const CURRENCY_API_KEY = 'cur_live_anGzRistT9B8GwFbkQTe6zvN2U4W7ZL6tM6YZCFY';
+export const CURRENCY_API_KEY = '823fd9a381aec08ab3e59fa4977e4bfe';
