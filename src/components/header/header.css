@@ -1,0 +1,12 @@
+:root {
+    --thistle: #ddbdd5ff;
+    --blue-gray: #6b9ac4ff;
+    --icterine: #faff7fff;
+    --dark-slate-gray: #395756ff;
+    --blush: #e75a7cff;
+}
+
+.navbar {
+    background-color: var(--blush);
+    /* Use the blush color from your palette */
+}
