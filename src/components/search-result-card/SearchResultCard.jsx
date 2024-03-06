@@ -4,8 +4,13 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const SearchResultCard = ({ data, onClose }) => {
-  
-  const { city, lat, lon, weatherData, currencyRate } = data;
+  const { city, lat, lon, weatherData, currencyRate, distance } = data;
+
+  console.log('distance');
+console.log(distance);
+
+  // if it is possible convert to km
+  const distanceInKm = distance ? (distance / 1000).toFixed(2) + " km" : "Distance unknown";
 
   return (
     <Card style={{ width: '18rem', margin: '1rem' }}>
@@ -13,6 +18,7 @@ const SearchResultCard = ({ data, onClose }) => {
         <Card.Title>{city}</Card.Title>
         <p>Temperature: {weatherData?.main?.temp} °C</p>
         <p>Currency Rate to GBP: {currencyRate}</p>
+        <p>Distance: {distanceInKm}</p>
         <div style={{ height: '200px', marginTop: '10px' }}>
           <MapContainer center={[lat, lon]} zoom={13} scrollWheelZoom={false} style={{ height: '100%', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>

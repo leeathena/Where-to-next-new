@@ -19,3 +19,5 @@ export const WEATHER_API_KEY = '474bb2503c4e1995d2a119127b776565';
 export const CURRENCY_API_URL = 'https://api.currencyapi.com/v3/latest?apikey=cur_live_anGzRistT9B8GwFbkQTe6zvN2U4W7ZL6tM6YZCFY&currencies=USD%2CEUR%2CJPY%2CAUD%2CCAD%2CCHF%2CCNY%2CSEK%2CNZD&base_currency=GBP';
 
 export const CURRENCY_API_KEY = 'cur_live_anGzRistT9B8GwFbkQTe6zvN2U4W7ZL6tM6YZCFY';
+
+export const GEOAPIFY_API_KEY = 'addd5a1a8efb42c9ad97ecfd8f615f6c';
