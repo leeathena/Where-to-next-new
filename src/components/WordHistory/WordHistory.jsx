@@ -1,23 +1,27 @@
 // WordHistory.jsx
 import React from 'react';
 
-function WordHistory({ history }) {
-  // Adjusted part of WordHistory.jsx to include the class name
-return (
-    <div className="word-history-section">
-      <div className="container bg-light text-left word-container">
-        <h3 className="section-heading">Previously Searched Cities</h3>
-        <section className="text-center">
-          {history.map((city, index) => (
-            <button key={index} className="btn hist-btn word-history">
-              {city}
-            </button>
-          ))}
-        </section>
+function WordHistory({ history, clearHistory }) {
+    return (
+      <div className="word-history-section">
+        <div className="container bg-light text-left word-container">
+          <h3 className="section-heading">Previously Searched Cities</h3>
+          <section className="text-center">
+            {history.map((city, index) => (
+              <button key={index} className="btn hist-btn word-history">
+                {city}
+              </button>
+            ))}
+            {history.length > 0 && (
+              <button onClick={clearHistory} className="btn btn-danger mt-3">
+                Clear
+              </button>
+            )}
+          </section>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
   
-}
 
 export default WordHistory;
