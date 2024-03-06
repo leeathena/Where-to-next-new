@@ -12,9 +12,12 @@
   "dependencies": {
     "@vitejs/plugin-react": "^4.2.1",
     "bootstrap": "^5.3.3",
+    "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-accessible-accordion": "^5.0.0",
+    "react-bootstrap": "^2.10.1",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
     "react-select-async-paginate": "^0.7.3"
   },
   "devDependencies": {

@@ -5,17 +5,28 @@ import Header from './components/header/Header';
 import Search from './components/search/search';
 import CurrentWeather from './components/current-weather/current-weather';
 import { WEATHER_API_URL, WEATHER_API_KEY, CURRENCY_API_URL, CURRENCY_API_KEY } from './API/api';
+import SearchResultCard from './components/search-result-card/SearchResultCard';
 
 function App() {
   const [currentWeather, setCurrentWeather] = useState(null);
   const [currencyRate, setCurrencyRate] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+
+
+  const handleCloseCard = (index) => {
+    setSearchResults(currentResults => {
+      const updatedResults = [...currentResults];
+      updatedResults.splice(index, 1);
+      return updatedResults;
+    });
+  };
 
   const handleOnSearchChange = (searchData) => {
-    const [lat, lon] = searchData.value.split(" ");
+    const [lat, lon] = searchData.value.split(" ").map(Number);
 
     const currentWeatherFetch = fetch(`${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`);
     const forecastWeatherFetch = fetch(`${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`);
-    
+
     // Placeholder for determining the currency code based on the selected city's country
     // Implement this functionality based on your application's needs
     const currencyCode = "EUR"; // Example placeholder, replace with actual logic to determine currency code
@@ -39,6 +50,17 @@ function App() {
 
         setCurrentWeather({ city: searchData.label, ...weatherData });
         setCurrencyRate(rate); // Set the currency rate with the fetched data
+
+        const resultData = {
+          city: searchData.label, // city name
+          lat,
+          lon,
+          weatherData,
+          forecastData,
+          currencyRate: rate
+        };
+
+        setSearchResults(currentResults => [...currentResults, resultData]);
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
@@ -51,8 +73,15 @@ function App() {
       <div className="container">
         <Header />
         <Search onSearchChange={handleOnSearchChange} />
-        {currentWeather && <CurrentWeather data={currentWeather} />}
-        {currencyRate && <p>Currency Rate to GBP: {currencyRate}</p>}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+          {searchResults.map((result, index) => (
+            <SearchResultCard
+              key={index}
+              data={{ ...result, currentWeather, currencyRate }}
+              onClose={() => handleCloseCard(index)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
