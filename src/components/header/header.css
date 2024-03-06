@@ -1,12 +1,26 @@
+/* header.css */
 :root {
-    --thistle: #ddbdd5ff;
-    --blue-gray: #6b9ac4ff;
-    --icterine: #faff7fff;
-    --dark-slate-gray: #395756ff;
-    --blush: #e75a7cff;
-    --light-gray: #f5f5f5; /* Light gray color */
+    --bg-header-color: #f5f5f5; /* Light gray background for the header */
+    --text-color: #333; /* Dark text color for contrast */
 }
 
 .navbar {
-    background-color: var(--light-gray); /* Use light gray color */
+    background-color: var(--bg-header-color);
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    color: var(--text-color) !important; /* Override default link color */
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none !important; /* Remove underline from links */
+    font-size: 1.5rem; /* Larger font size */
+}
+
+/* Adjustments for centering the navbar-brand text and providing a more appealing look */
+.container-fluid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
