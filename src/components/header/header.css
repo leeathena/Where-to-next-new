@@ -10,3 +10,8 @@
 .navbar {
     background-color: var(--light-gray); /* Use light gray color */
 }
+
+img{
+    width: 300px;
+    height: auto;
+}

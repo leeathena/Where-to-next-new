@@ -1,25 +1,47 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { GEO_API_URL, geoApiOptions } from '../../API/api';
-import React from 'react';
-import citiesByContinent from '../../cities.js';
-import Select from 'react-select';
 
 const Search = ({ onSearchChange }) => {
     const [search, setSearch] = useState(null);
+    const [previouslySearchedCities, setPreviouslySearchedCities] = useState([]);
 
-    const loadOptions = async (inputValue) => {
+    useEffect(() => {
+        // Load previously searched cities from local storage on component mount
+        const cachedCities = localStorage.getItem('previously_searched_cities');
+        if (cachedCities) {
+            setPreviouslySearchedCities(JSON.parse(cachedCities));
+        }
+    }, []);
+
+    const loadOptions = async (inputValue, loadedOptions, { page }) => {
         try {
             const response = await fetch(`${GEO_API_URL}/cities?minPopulation=100000&namePrefix=${inputValue}`, geoApiOptions);
             const data = await response.json();
+            const options = data.data.map((city) => ({
+                value: `${city.latitude} ${city.longitude}`,
+                label: `${city.name}, ${city.countryCode}`,
+            }));
+
+            // Combine options from API with previously searched cities
+            const combinedOptions = [
+                ...options,
+                ...previouslySearchedCities.map(city => ({
+                    value: city.value,
+                    label: city.label,
+                }))
+            ];
+
             return {
-                options: data.data.map((city) => ({
-                    value: `${city.latitude} ${city.longitude}`,
-                    label: `${city.name}, ${city.countryCode}`,
-                })),
+                options: combinedOptions,
+                hasMore: data.hasNextPage,
+                additional: {
+                    page: page + 1,
+                },
             };
         } catch (err) {
             console.error(err);
+            return { options: [], hasMore: false };
         }
     };
 
@@ -35,6 +57,9 @@ const Search = ({ onSearchChange }) => {
             value={search}
             onChange={handleOnChange}
             loadOptions={loadOptions}
+            additional={{
+                page: 1,
+            }}
         />
     );
 };

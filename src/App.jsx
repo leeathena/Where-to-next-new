@@ -46,7 +46,13 @@ function App() {
   };
 
   const handleOnSearchChange = (searchData) => {
-    const [lat, lon] = searchData.value.split(" ").map(Number);
+    if (!searchData || !searchData.value) {
+      console.error("Invalid searchData:", searchData);
+      return;
+    }
+  
+    const { value } = searchData;
+    const [lat, lon] = value.split(" ").map(Number);
     const weatherFetchUrl = `${WEATHER_API_URL}/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
     const forecastFetchUrl = `${WEATHER_API_URL}/forecast?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`;
     const currencyFetchUrl = `${CURRENCY_API_URL}&symbols=EUR`; // Adjust accordingly
@@ -106,7 +112,7 @@ function App() {
             />
           ))}
         </div>
-        <WordHistory history={searchHistory} />
+        <WordHistory history={searchHistory} onSearchCity={handleOnSearchChange} />
       </div>
     </>
   );
