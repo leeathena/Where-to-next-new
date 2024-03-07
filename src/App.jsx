@@ -22,8 +22,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [searchHistory, setSearchHistory] = useState([]);
-  const [distance, setDistance] = useState(null);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const [selectedResultIndex, setSelectedResultIndex] = useState(null); // random select
 
   // Load search history from local storage
@@ -36,7 +35,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
   }, [searchHistory]);
-  
+
   useEffect(() => {
     let timer;
     if (showAlert) {
@@ -56,9 +55,16 @@ function App() {
 
   // Random Select
   const handleRandomSelect = () => {
-    if (searchResults.length === 0) return;
+    console.log("Random select clicked");
+    if (searchResults.length === 0) {
+      console.log("searchResults is empty");
+
+      return;
+    }
 
     const randomIndex = Math.floor(Math.random() * searchResults.length);
+    console.log(`searchResults length:  ${searchResults.length}`);
+    console.log(`searchResults Index: ${randomIndex}`);
     setSelectedResultIndex(randomIndex);
   };
 
@@ -80,58 +86,58 @@ function App() {
         }
       })
     ])
-    .then(async ([weatherResp, forecastResp, currencyResp]) => {
-      const weatherData = await weatherResp.json();
-      const forecastData = await forecastResp.json();
-      const currencyData = await currencyResp.json();
+      .then(async ([weatherResp, forecastResp, currencyResp]) => {
+        const weatherData = await weatherResp.json();
+        const forecastData = await forecastResp.json();
+        const currencyData = await currencyResp.json();
 
-      const rate = currencyData?.rates?.EUR; // Adjust according to your currency data structure
+        const rate = currencyData?.rates?.EUR; // Adjust according to your currency data structure
 
-      setCurrentWeather({ city: searchData.label, ...weatherData });
-      setCurrencyRate(rate);
-      setShowAlert(true); // Show the alert upon successful data fetch
-      setLoading(false);
-      // Add city to the search history if it's not already included
-      if (!searchHistory.includes(searchData.label)) {
-        setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
-      }
+        setCurrentWeather({ city: searchData.label, ...weatherData });
+        setCurrencyRate(rate);
+        setShowAlert(true); // Show the alert upon successful data fetch
+        setLoading(false);
+        // Add city to the search history if it's not already included
+        if (!searchHistory.includes(searchData.label)) {
+          setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
+        }
 
-      getCurrentLocation().then((position) => {
-        const userLat = position.coords.latitude;
-        const userLon = position.coords.longitude;
-      
-        calculateDistance(userLat, userLon, lat, lon, GEOAPIFY_API_KEY).then((distanceValue) => {
-        
-          console.log (`distanceValue: ${distanceValue}`);
-         
-          const newResult = {
-            city: searchData.label,
-            lat,
-            lon,
-            weatherData,
-            forecastData,
-            currencyRate: rate,
-            distance: distanceValue,
-          };
-      
-          setSearchResults(currentResults => [...currentResults, newResult]);
+        getCurrentLocation().then((position) => {
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+
+          calculateDistance(userLat, userLon, lat, lon, GEOAPIFY_API_KEY).then((distanceValue) => {
+
+            console.log(`distanceValue: ${distanceValue}`);
+
+            const newResult = {
+              city: searchData.label,
+              lat,
+              lon,
+              weatherData,
+              forecastData,
+              currencyRate: rate,
+              distance: distanceValue,
+            };
+
+            setSearchResults(currentResults => [...currentResults, newResult]);
+          });
+        }).catch((error) => {
+          console.error("geolocation error: ", error);
+          setLoading(false);
         });
-      }).catch((error) => {
-        console.error("geolocation error: ", error);
-        setLoading(false); 
-      });
 
-    })
-    .catch((err) => {
-      console.error("Error fetching data:", err);
-    });
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+      });
   };
 
   const clearSearchHistory = () => {
     setSearchHistory([]); // Clears the search history state
     localStorage.setItem("searchHistory", JSON.stringify([])); // Optionally clear the history in local storage too
   };
-  
+
 
   return (
     <>
@@ -143,13 +149,20 @@ function App() {
         )}
         {!loading && (
           <>
+            {showAlert && (
+              <div className="alert-container">
+                <SimpleAlert />
+              </div>
+            )}
             <Header />
             <Search onSearchChange={handleOnSearchChange} />
-            {showAlert && <SimpleAlert />}
+
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
               {searchResults.map((result, index) => (
                 <SearchResultCard
-                  key={index}
+                  key={`${index}-${selectedResultIndex}`}
+                  index={index}
+                  selectedResultIndex={selectedResultIndex}
                   data={{ ...result, currentWeather, currencyRate }}
                   onClose={() => handleCloseCard(index)}
                 />
@@ -158,8 +171,9 @@ function App() {
             <WordHistory history={searchHistory} clearHistory={clearSearchHistory} />
           </>
         )}
-         <button className="random-choice-btn" onClick={handleRandomSelect}>Random Select</button>
+
       </div>
+      <button className="random-choice-btn" onClick={handleRandomSelect}>Random Select</button>
     </>
   );
 }

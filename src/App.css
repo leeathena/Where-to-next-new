@@ -47,3 +47,12 @@ body {
   z-index: 1000;
   cursor: pointer;
 }
+
+.alert-container {
+  position: absolute;
+  top: 0;
+  left: 60%;
+  /* transform: translateX(-50%); */
+  width: auto;
+  z-index: 1000;
+}
