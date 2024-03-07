@@ -160,7 +160,7 @@ function App() {
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
           {searchResults.map((result, index) => (
             <SearchResultCard
-              key={`${index}-${selectedResultIndex}`}
+              key={`${result.city}-${index}`}
               index={index}
               selectedResultIndex={selectedResultIndex}
               data={{ ...result, currentWeather, currencyRate }}

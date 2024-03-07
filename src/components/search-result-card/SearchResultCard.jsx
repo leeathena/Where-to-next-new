@@ -10,10 +10,11 @@ const SearchResultCard = ({ data, onClose, selectedResultIndex, index }) => {
 
   // if it is possible convert to km
   const distanceInKm = distance ? (distance / 1000).toFixed(2) + " km" : "Distance unknown";
-  const cardStyle = selectedResultIndex === index ? { backgroundColor: 'green' } : {};
+  // style for random selected
+  const cardStyle = selectedResultIndex === index ? { backgroundColor: '#87CEFA' } : {};
 
   return (
-    <Card style={{ width: '18rem', margin: '1rem' }}>
+    <Card style={{ ...cardStyle, width: '18rem', margin: '1rem' }}>
       <Card.Body>
         <Card.Title>{city}</Card.Title>
         <p>Temperature: {weatherData?.main?.temp} °C</p>

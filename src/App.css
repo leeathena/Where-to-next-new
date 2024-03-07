@@ -46,6 +46,7 @@ body {
   transform: translateY(-50%) rotate(-90deg);
   z-index: 1000;
   cursor: pointer;
+  background-color: #87CEFA;
 }
 
 .alert-container {
