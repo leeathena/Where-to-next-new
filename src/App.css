@@ -1,3 +1,12 @@
+:root {
+  --thistle: #ddbdd5ff;
+  --blue-gray: #6b9ac4ff;
+  --icterine: #faff7fff;
+  --dark-slate-gray: #395756ff;
+  --blush: #e75a7cff;
+  --light-gray: #f5f5f5; /* Light gray color */
+}
+
 .sidebar {
   position: fixed;
   left: -250px; /* Start off-screen */
@@ -70,3 +79,8 @@ body {
   background-color: rgba(255, 255, 255, 0.5); 
   z-index: 999;
 }
+
+/* colour of search card */
+/* .card-body {
+  background-color: var(--thistle);
+} */
