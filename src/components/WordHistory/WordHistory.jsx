@@ -13,7 +13,7 @@ function WordHistory({ history, clearHistory }) {
               </button>
             ))}
             {history.length > 0 && (
-              <button onClick={clearHistory} className="btn btn-danger mt-3">
+              <button onClick={clearHistory} className="btn btn-danger mt-3" style={{ backgroundColor: "#e75a7cff" }}>
                 Clear
               </button>
             )}

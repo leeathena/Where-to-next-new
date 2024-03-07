@@ -25,7 +25,7 @@ const SearchResultCard = ({ data, onClose, selectedResultIndex, index }) => {
             <Marker position={[lat, lon]}></Marker>
           </MapContainer>
         </div>
-        <Button variant="secondary" onClick={onClose} style={{ marginTop: '10px' }}>
+        <Button variant="secondary" onClick={onClose} style={{ marginTop: '10px', backgroundColor: '#6b9ac4ff' }}>
           Close
         </Button>
       </Card.Body>
