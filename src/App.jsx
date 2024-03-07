@@ -95,8 +95,7 @@ function App() {
 
         setCurrentWeather({ city: searchData.label, ...weatherData });
         setCurrencyRate(rate);
-        setShowAlert(true); // Show the alert upon successful data fetch
-        setLoading(false);
+
         // Add city to the search history if it's not already included
         if (!searchHistory.includes(searchData.label)) {
           setSearchHistory(prevHistory => [...prevHistory, searchData.label]);
@@ -121,15 +120,17 @@ function App() {
             };
 
             setSearchResults(currentResults => [...currentResults, newResult]);
+            setLoading(false);
+            setShowAlert(true); // Show the alert upon successful data fetch
           });
         }).catch((error) => {
           console.error("geolocation error: ", error);
-          setLoading(false);
         });
 
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
+        setLoading(false);
       });
   };
 
@@ -147,35 +148,32 @@ function App() {
             <ReactLoading type={"bars"} color={"#0000FF"} height={'25%'} width={'25%'} />
           </div>
         )}
-        {!loading && (
-          <>
-            {showAlert && (
-              <div className="alert-container">
-                <SimpleAlert />
-              </div>
-            )}
-            <Header />
-            <Search onSearchChange={handleOnSearchChange} />
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-              {searchResults.map((result, index) => (
-                <SearchResultCard
-                  key={`${index}-${selectedResultIndex}`}
-                  index={index}
-                  selectedResultIndex={selectedResultIndex}
-                  data={{ ...result, currentWeather, currencyRate }}
-                  onClose={() => handleCloseCard(index)}
-                />
-              ))}
-            </div>
-            <WordHistory history={searchHistory} clearHistory={clearSearchHistory} />
-          </>
+        {showAlert && (
+          <div className="alert-container">
+            <SimpleAlert />
+          </div>
         )}
+        <Header />
+        <Search onSearchChange={handleOnSearchChange} />
 
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+          {searchResults.map((result, index) => (
+            <SearchResultCard
+              key={`${index}-${selectedResultIndex}`}
+              index={index}
+              selectedResultIndex={selectedResultIndex}
+              data={{ ...result, currentWeather, currencyRate }}
+              onClose={() => handleCloseCard(index)}
+            />
+          ))}
+        </div>
+        <WordHistory history={searchHistory} clearHistory={clearSearchHistory} />
       </div>
       <button className="random-choice-btn" onClick={handleRandomSelect}>Random Select</button>
     </>
   );
+
 }
 
 
