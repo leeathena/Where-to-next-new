@@ -24,6 +24,7 @@ function App() {
   const [searchHistory, setSearchHistory] = useState([]);
   const [distance, setDistance] = useState(null);
   const [loading, setLoading] = useState(false); 
+  const [selectedResultIndex, setSelectedResultIndex] = useState(null); // random select
 
   // Load search history from local storage
   useEffect(() => {
@@ -51,6 +52,14 @@ function App() {
       updatedResults.splice(index, 1);
       return updatedResults;
     });
+  };
+
+  // Random Select
+  const handleRandomSelect = () => {
+    if (searchResults.length === 0) return;
+
+    const randomIndex = Math.floor(Math.random() * searchResults.length);
+    setSelectedResultIndex(randomIndex);
   };
 
   const handleOnSearchChange = (searchData) => {
@@ -149,6 +158,7 @@ function App() {
             <WordHistory history={searchHistory} clearHistory={clearSearchHistory} />
           </>
         )}
+         <button className="random-choice-btn" onClick={handleRandomSelect}>Random Select</button>
       </div>
     </>
   );
